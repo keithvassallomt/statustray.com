@@ -1,0 +1,38 @@
+version: 0.2
+
+env:
+  variables:
+    SITE_BUCKET: statustray.com
+    DOCS_BUCKET: docs.statustray.com
+    SITE_CF_DISTRIBUTION_ID: ""
+    DOCS_CF_DISTRIBUTION_ID: ""
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - npm ci
+
+  build:
+    commands:
+      - npm run build
+      - npm run docs:build
+
+  post_build:
+    commands:
+      - aws s3 sync dist/ "s3://${SITE_BUCKET}" --delete
+      - aws s3 sync docs/.vitepress/dist/ "s3://${DOCS_BUCKET}" --delete
+      - |
+        if [ -n "$SITE_CF_DISTRIBUTION_ID" ]; then
+          aws cloudfront create-invalidation --distribution-id "$SITE_CF_DISTRIBUTION_ID" --paths "/*"
+        fi
+      - |
+        if [ -n "$DOCS_CF_DISTRIBUTION_ID" ]; then
+          aws cloudfront create-invalidation --distribution-id "$DOCS_CF_DISTRIBUTION_ID" --paths "/*"
+        fi
+
+artifacts:
+  files:
+    - "**/*"
+  base-directory: dist
