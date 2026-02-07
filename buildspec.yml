@@ -4,8 +4,8 @@ env:
   variables:
     SITE_BUCKET: statustray.com
     DOCS_BUCKET: docs.statustray.com
-    SITE_CF_DISTRIBUTION_ID: ""
-    DOCS_CF_DISTRIBUTION_ID: ""
+    SITE_CF_DISTRIBUTION_ID: "E4PRQ7JTX2CBU"
+    DOCS_CF_DISTRIBUTION_ID: "E1J4JHHULV27C9"
 
 phases:
   install:
