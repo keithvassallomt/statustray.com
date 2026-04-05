@@ -467,6 +467,9 @@
         <a href={links.docs} target="_blank" rel="noreferrer">Docs</a>
         <a href={links.source} target="_blank" rel="noreferrer">Source</a>
         <a href={links.install} target="_blank" rel="noreferrer">Install</a>
+        <a href="https://friendlymanifesto.org" target="_blank" rel="noreferrer">
+          <img src="/friendly-manifesto-badge-white.svg" alt="We Are Friendly" class="h-6" />
+        </a>
       </div>
     </div>
   </footer>
