@@ -7,7 +7,7 @@ hero:
   text: The System Tray, Back in GNOME
   tagline: Setup, usage, and troubleshooting docs for the Status Tray extension.
   image:
-    src: /logo.png
+    src: /logo.svg
     alt: Status Tray logo
   actions:
     - theme: brand

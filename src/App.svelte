@@ -7,8 +7,6 @@
     source: 'https://github.com/keithvassallomt/status-tray',
     docs: 'https://docs.statustray.com',
   };
-  const METADATA_URL =
-    'https://raw.githubusercontent.com/keithvassallomt/status-tray/refs/heads/main/src/metadata.json';
 
   let latestVersionName = ego.latestVersion ?? 'Unknown';
   let gnomeShell = ego.gnomeShell ?? 'GNOME Shell';
@@ -48,29 +46,6 @@
     }
   };
 
-  const refreshFromMetadata = async () => {
-    try {
-      const response = await fetch(METADATA_URL);
-      if (!response.ok) {
-        return;
-      }
-      const metadata = await response.json();
-      const fromMetadata = metadata?.['version-name'];
-      if (typeof fromMetadata === 'string' && fromMetadata.trim()) {
-        latestVersionName = fromMetadata.trim();
-      }
-      const shells = metadata?.['shell-version'];
-      if (Array.isArray(shells) && shells.length) {
-        const sorted = [...new Set(shells)].map(Number).sort((a, b) => a - b);
-        gnomeShell = sorted.length === 1
-          ? `GNOME Shell ${sorted[0]}`
-          : `GNOME Shell ${sorted[0]}–${sorted[sorted.length - 1]}`;
-      }
-    } catch {
-      // Keep fallback values if metadata fetch fails.
-    }
-  };
-
   $: nextThemeValue = theme === 'system' ? 'light' : theme === 'light' ? 'dark' : 'system';
 
   onMount(() => {
@@ -91,7 +66,6 @@
     };
     syncSystem();
     media.addEventListener?.('change', syncSystem);
-    refreshFromMetadata();
     return () => media.removeEventListener?.('change', syncSystem);
   });
 </script>
@@ -101,7 +75,7 @@
     <div class="container flex flex-col gap-10">
       <nav class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <img src="/images/logo.png" alt="Status Tray logo" class="h-10 w-10 object-contain" />
+          <img src="/images/logo.svg" alt="Status Tray logo" class="h-10 w-10 object-contain" />
           <div>
             <div class="text-sm tracking-[0.35em] uppercase text-(--muted)">Status Tray</div>
           </div>

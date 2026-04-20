@@ -49,35 +49,39 @@ const extractShellVersions = (html) => {
   return null;
 };
 
-const extractLatestVersion = (html) => {
-  const preferredLabelMatches = [
-    html.match(/>\s*Version\s*Name\s*<\/dt>\s*<dd>([\s\S]*?)<\/dd>/i),
-    html.match(/>\s*Version\s*name\s*<\/dt>\s*<dd>([\s\S]*?)<\/dd>/i),
-  ];
-  for (const match of preferredLabelMatches) {
-    if (!match) {
+const extractVersionByPk = (html, pk) => {
+  if (!pk) {
+    return null;
+  }
+  const rowRegex = new RegExp(`<tr\\s+data-pk="${pk}"[^>]*>([\\s\\S]*?)</tr>`, 'i');
+  const row = html.match(rowRegex);
+  if (!row) {
+    return null;
+  }
+  const cell = row[1].match(/<td[^>]*>([\s\S]*?)<\/td>/i);
+  if (!cell) {
+    return null;
+  }
+  const version = normalizeVersionLabel(stripHtml(cell[1]));
+  return version && !isRevisionOnlyVersion(version) ? version : null;
+};
+
+const extractFirstActiveVersion = (html) => {
+  const rowRegex = /<tr\s+data-pk="\d+"[^>]*>([\s\S]*?)<\/tr>/gi;
+  for (const match of html.matchAll(rowRegex)) {
+    const body = match[1];
+    if (!/extension-status\s+active/i.test(body)) {
       continue;
     }
-    const version = normalizeVersionLabel(stripHtml(match[1]));
+    const cell = body.match(/<td[^>]*>([\s\S]*?)<\/td>/i);
+    if (!cell) {
+      continue;
+    }
+    const version = normalizeVersionLabel(stripHtml(cell[1]));
     if (version && !isRevisionOnlyVersion(version)) {
       return version;
     }
   }
-
-  const labelMatch = html.match(/>\s*Version\s*<\/dt>\s*<dd>([\s\S]*?)<\/dd>/i);
-  if (labelMatch) {
-    const version = normalizeVersionLabel(stripHtml(labelMatch[1]));
-    if (version && !isRevisionOnlyVersion(version)) {
-      return version;
-    }
-  }
-
-  const normalized = html.replace(/\s+/g, ' ');
-  const textMatch = normalized.match(/(?:Latest\s+)?Version\s*Name[^0-9A-Za-z]*([0-9][0-9A-Za-z.\-]*)/i);
-  if (textMatch) {
-    return textMatch[1].trim();
-  }
-
   return null;
 };
 
@@ -109,25 +113,25 @@ const extractFromInfoApi = (payload) => {
 
   const next = {};
 
-  const preferredLabelFields = [
-    'version-name',
-    'version_name',
-    'versionName',
-    'latest_version_name',
-    'version-tag',
-    'version_tag',
-    'versionTag',
-  ];
-  for (const field of preferredLabelFields) {
+  const labelFields = ['version-name', 'version_name', 'versionName', 'latest_version_name'];
+  for (const field of labelFields) {
     const value = normalizeVersionLabel(payload[field]);
-    if (value) {
+    if (value && !isRevisionOnlyVersion(value)) {
       next.latestVersion = value;
       break;
     }
   }
 
-  if (!next.latestVersion && (typeof payload.version === 'number' || typeof payload.version === 'string')) {
-    next.latestVersion = normalizeVersionLabel(String(payload.version)) ?? String(payload.version);
+  const pkFields = ['version_tag', 'version-tag', 'versionTag'];
+  for (const field of pkFields) {
+    const raw = payload[field];
+    if (raw !== undefined && raw !== null) {
+      const pk = String(raw).trim();
+      if (/^\d+$/.test(pk)) {
+        next.versionPk = pk;
+        break;
+      }
+    }
   }
 
   if (payload.shell_version_map && typeof payload.shell_version_map === 'object') {
@@ -146,6 +150,7 @@ const run = async () => {
   try {
     let gnomeShell = fallback.gnomeShell;
     let latestVersion = fallback.latestVersion;
+    let versionPk = null;
     let apiError;
 
     try {
@@ -154,16 +159,24 @@ const run = async () => {
       if (apiData) {
         gnomeShell = apiData.gnomeShell ?? gnomeShell;
         latestVersion = apiData.latestVersion ?? latestVersion;
+        versionPk = apiData.versionPk ?? null;
       }
     } catch (error) {
       apiError = error;
     }
 
-    if (latestVersion === fallback.latestVersion || gnomeShell === fallback.gnomeShell || isRevisionOnlyVersion(latestVersion)) {
+    const needsHtml =
+      latestVersion === fallback.latestVersion ||
+      gnomeShell === fallback.gnomeShell ||
+      isRevisionOnlyVersion(latestVersion) ||
+      Boolean(versionPk);
+
+    if (needsHtml) {
       const html = await fetchHtml(EGO_URL);
       gnomeShell = extractShellVersions(html) ?? gnomeShell;
-      const htmlVersion = extractLatestVersion(html);
-      if (htmlVersion && (!latestVersion || latestVersion === fallback.latestVersion || isRevisionOnlyVersion(latestVersion))) {
+      const byPk = extractVersionByPk(html, versionPk);
+      const htmlVersion = byPk ?? extractFirstActiveVersion(html);
+      if (htmlVersion) {
         latestVersion = htmlVersion;
       }
     }
