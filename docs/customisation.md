@@ -20,6 +20,13 @@ Although Status Tray will attempt to resize your icons to fit the panel, you sho
 
 If you want to revert to the default icon for an application, simply click the "Reset to Default" button.
 
+## Icon Size
+The size of the status icons in the GNOME top panel can be customised via the main settings panel. 
+
+![Icon size slider](/icon-size.png)
+
+Sizes range from 14px (smallest) to 20px (largest). The default size is 16px. 
+
 ## Fallback Icons
 
 Sometimes, you may want to use the default icon provided by an app, but that icon might fail to load in certain situatons. This typically happens when an icon is missing on your system, or when an app doesn't properly set the icon name. In this case, you'll want to enable **Use as Fallback Only**. This will use the default icon provided by the app, but if that icon fails to load, it will fall back to the icon you've chosen here.
