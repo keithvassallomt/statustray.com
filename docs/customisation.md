@@ -27,6 +27,24 @@ The size of the status icons in the GNOME top panel can be customised via the ma
 
 Sizes range from 14px (smallest) to 20px (largest). The default size is 16px. 
 
+## Padding Between Icons
+You can adjust the gap between adjacent status icons in the panel using the **Padding between icons** slider.
+
+The value is the total gap, in pixels, between two neighbouring icons, and ranges from 0px (icons sit flush together) to 20px. The default is 4px. Changes apply immediately.
+
+## Icon Interaction
+The **Icon interaction** setting controls what happens when you click a status icon:
+
+- **Click for menu** (default): a left or right click opens the application's menu.
+- **Left click to open, Right click for menu**: a left click opens the application's window, while a right click opens its menu.
+- **Double-click to open, Click for menu**: a double click opens the application's window, while a single click opens its menu (after a brief delay).
+
+In every mode, a right click opens the menu and a middle click triggers the application's secondary action, where the app supports one.
+
+::: tip
+Some applications don't provide an action to open their window from the tray icon. For those apps, Status Tray falls back to showing the menu.
+:::
+
 ## Fallback Icons
 
 Sometimes, you may want to use the default icon provided by an app, but that icon might fail to load in certain situatons. This typically happens when an icon is missing on your system, or when an app doesn't properly set the icon name. In this case, you'll want to enable **Use as Fallback Only**. This will use the default icon provided by the app, but if that icon fails to load, it will fall back to the icon you've chosen here.
