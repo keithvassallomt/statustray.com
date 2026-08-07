@@ -45,6 +45,26 @@ In every mode, a right click opens the menu and a middle click triggers the appl
 Some applications don't provide an action to open their window from the tray icon. For those apps, Status Tray falls back to showing the menu.
 :::
 
+## Keyboard Shortcut
+
+The **Open Menu Shortcut** setting lets you reach the tray without a pointer. Pressing the shortcut opens the menu of the leftmost status icon and moves keyboard focus into it, so you can act on it straight away.
+
+Once the menu is open:
+
+- **Up** and **Down** move between the items in the menu, and **Enter** activates the highlighted one.
+- **Left** and **Right** move to the menu of the neighbouring status icon, so you can reach every app in the tray from a single key press.
+- **Esc** closes the menu, as does pressing the shortcut again.
+
+To set a shortcut, click the **Open Menu Shortcut** row in settings and press the combination you want. Press **Esc** to cancel without changing anything, or **Backspace** to remove a shortcut you've already set.
+
+No shortcut is set by default, and the combination must include a modifier such as <kbd>Super</kbd>, <kbd>Ctrl</kbd> or <kbd>Alt</kbd>. A single letter on its own would be captured everywhere and stop you typing it.
+
+If you've enabled overflow icons and set the slider so that every icon lives in the overflow menu, the shortcut opens that menu instead.
+
+::: warning Shortcut Conflicts
+GNOME doesn't let an extension check whether a shortcut is already in use, so Status Tray can't warn you about a clash. If your shortcut appears to do nothing, it's most likely already taken by GNOME itself, another extension, or an application. Try a different combination.
+:::
+
 ## Fallback Icons
 
 Sometimes, you may want to use the default icon provided by an app, but that icon might fail to load in certain situatons. This typically happens when an icon is missing on your system, or when an app doesn't properly set the icon name. In this case, you'll want to enable **Use as Fallback Only**. This will use the default icon provided by the app, but if that icon fails to load, it will fall back to the icon you've chosen here.

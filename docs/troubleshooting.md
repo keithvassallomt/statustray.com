@@ -12,6 +12,12 @@
 - Disable other tray-related extensions to rule out conflicts.
 - Log out and log back in.
 
+## Keyboard shortcut does nothing
+
+- Check that a shortcut is actually set. There is no default, so the **Open Menu Shortcut** row reads "Disabled" until you set one.
+- The combination is most likely already in use by GNOME, another extension, or an application. Status Tray has no way to detect this, so try a different one.
+- Confirm at least one app is showing a status icon. With an empty tray there is no menu to open.
+
 ## Wrong icon style
 
 - Open extension preferences.
