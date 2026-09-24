@@ -19,6 +19,32 @@
     'Icon overrides or custom file paths',
     'Symbolic tuning with live preview',
   ];
+  const prefsSlides = [
+    { label: 'Apps', src: '/images/prefs-apps.png', alt: 'Apps tab listing tray apps with per-app controls' },
+    { label: 'Appearance', src: '/images/prefs-appearance.png', alt: 'Appearance tab with icon style, size, padding and panel position' },
+    { label: 'Behaviour', src: '/images/prefs-behaviour.png', alt: 'Behaviour tab with click action, keyboard shortcut and overflow settings' },
+  ];
+  let prefsTrack;
+  let prefsIndex = 0;
+  let prefsTimer;
+
+  const showPrefsSlide = (index) => {
+    prefsTrack.scrollTo({ left: index * prefsTrack.clientWidth, behavior: 'smooth' });
+  };
+
+  // Restarted on every manual change so the carousel never moves straight
+  // after someone picks a tab or swipes.
+  const startPrefsTimer = () => {
+    clearInterval(prefsTimer);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    prefsTimer = setInterval(() => showPrefsSlide((prefsIndex + 1) % prefsSlides.length), 5000);
+  };
+
+  const stopPrefsTimer = () => clearInterval(prefsTimer);
+
+  const syncPrefsIndex = () => {
+    prefsIndex = Math.round(prefsTrack.scrollLeft / prefsTrack.clientWidth);
+  };
 
   const applyTheme = (value) => {
     const root = document.documentElement;
@@ -66,7 +92,11 @@
     };
     syncSystem();
     media.addEventListener?.('change', syncSystem);
-    return () => media.removeEventListener?.('change', syncSystem);
+    startPrefsTimer();
+    return () => {
+      media.removeEventListener?.('change', syncSystem);
+      stopPrefsTimer();
+    };
   });
 </script>
 
@@ -253,13 +283,14 @@
           <div class="card highlight-card">
             <div class="text-(--muted)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2" />
-                <circle cx="12" cy="12" r="7" />
+                <circle cx="6" cy="12" r="1.5" />
+                <circle cx="12" cy="12" r="1.5" />
+                <circle cx="18" cy="12" r="1.5" />
               </svg>
             </div>
-            <h3 class="font-semibold text-xl">Live updates</h3>
+            <h3 class="font-semibold text-xl">Overflow menu</h3>
             <p class="text-(--muted) mt-3">
-              Icon refreshes and status signals are handled automatically in real time.
+              Collapse extra icons into a single button, with an optional live preview of what's inside.
             </p>
           </div>
         </div>
@@ -278,7 +309,7 @@
           </p>
         </div>
         <div class="card">
-          <div class="overflow-hidden rounded-2xl border border-(--border)" style="aspect-ratio: 868 / 986;">
+          <div class="overflow-hidden rounded-2xl border border-(--border)" style="aspect-ratio: 761 / 882;">
             <video
               src="/videos/statustray_promo.mp4"
               class="h-full w-full object-cover"
@@ -296,9 +327,37 @@
           <img src="/images/screenshot-2.png" alt="App menu rendered from DBusMenu" />
           <p class="text-sm text-(--muted) mt-3">Menus render with real app actions.</p>
         </div>
-        <div class="card">
-          <img src="/images/screenshot-3.png" alt="Preferences list of tray apps" />
-          <p class="text-sm text-(--muted) mt-3">Preferences list with per-app control.</p>
+        <div
+          class="card"
+          role="region"
+          aria-label="Preferences screenshots"
+          on:mouseenter={stopPrefsTimer}
+          on:mouseleave={startPrefsTimer}
+          on:touchstart|passive={startPrefsTimer}
+        >
+          <div class="carousel" bind:this={prefsTrack} on:scroll={syncPrefsIndex}>
+            {#each prefsSlides as slide}
+              <img src={slide.src} alt={slide.alt} />
+            {/each}
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-3 mt-3">
+            <p class="text-sm text-(--muted)">Preferences, organised into three tabs.</p>
+            <div class="flex gap-2">
+              {#each prefsSlides as slide, i}
+                <button
+                  type="button"
+                  class={`carousel-tab ${i === prefsIndex ? 'active' : ''}`}
+                  aria-pressed={i === prefsIndex}
+                  on:click={() => {
+                    showPrefsSlide(i);
+                    startPrefsTimer();
+                  }}
+                >
+                  {slide.label}
+                </button>
+              {/each}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -442,7 +501,8 @@
         <a href={links.source} target="_blank" rel="noreferrer">Source</a>
         <a href={links.install} target="_blank" rel="noreferrer">Install</a>
         <a href="https://friendlymanifesto.org" target="_blank" rel="noreferrer">
-          <img src="/friendly-manifesto-badge-white.svg" alt="We Are Friendly" class="h-6" />
+          <img src="/friendly-manifesto-badge-black.svg" alt="We Are Friendly" class="h-6 light-only" />
+          <img src="/friendly-manifesto-badge-white.svg" alt="We Are Friendly" class="h-6 dark-only" />
         </a>
       </div>
     </div>

@@ -22,14 +22,14 @@
 
 [data-theme='dark'] {
   --bg: #0f1412;
-  --bg-elev: #141b18;
+  --bg-elev: #222d28;
   --text: #f1f4f0;
   --muted: #b3c0ba;
   --accent: #56d0b4;
   --accent-2: #7be2c8;
-  --border: #26302c;
-  --card: #141d19;
-  --shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  --border: #34413b;
+  --card: #1b2521;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
   --hero-glow: radial-gradient(circle at 20% 20%, rgba(86, 208, 180, 0.25), transparent 55%),
     radial-gradient(circle at 85% 10%, rgba(115, 83, 0, 0.2), transparent 45%);
   --grid: linear-gradient(180deg, rgba(241, 244, 240, 0.08) 1px, transparent 1px);
@@ -230,6 +230,56 @@ img {
 
 .toggle-track.on::after {
   transform: translateX(18px);
+}
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel img {
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
+}
+
+.carousel-tab {
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.carousel-tab:hover {
+  border-color: var(--accent);
+}
+
+.carousel-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+.dark-only {
+  display: none;
+}
+
+[data-theme='dark'] .light-only {
+  display: none;
+}
+
+[data-theme='dark'] .dark-only {
+  display: block;
 }
 
 .caption {

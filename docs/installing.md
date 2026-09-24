@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- GNOME 45 or later
+- GNOME 46 or later
 - Browser integration for GNOME Extensions (if installing from EGO)
 
 ## Install from GNOME Extensions (recommended)

@@ -6,7 +6,7 @@ const EGO_INFO_URL = 'https://extensions.gnome.org/extension-info/?pk=9164&shell
 const OUTPUT = new URL('../src/data/ego.json', import.meta.url);
 
 const fallback = {
-  gnomeShell: 'GNOME Shell 45–49',
+  gnomeShell: 'GNOME Shell 46–51',
   latestVersion: 'Unknown',
 };
 
@@ -135,7 +135,11 @@ const extractFromInfoApi = (payload) => {
   }
 
   if (payload.shell_version_map && typeof payload.shell_version_map === 'object') {
-    const shells = Object.keys(payload.shell_version_map).filter((key) => /^\d+(\.\d+)?$/.test(key));
+    // The map also lists shells that are only offered an older release (e.g.
+    // GNOME 45 still gets 1.19), so keep just the shells the newest one supports.
+    const entries = Object.entries(payload.shell_version_map).filter(([key]) => /^\d+(\.\d+)?$/.test(key));
+    const newest = Math.max(...entries.map(([, info]) => Number(info?.version) || 0));
+    const shells = entries.filter(([, info]) => Number(info?.version) === newest).map(([key]) => key);
     if (shells.length) {
       const sorted = [...new Set(shells)].sort((a, b) => Number.parseInt(a, 10) - Number.parseInt(b, 10));
       next.gnomeShell =

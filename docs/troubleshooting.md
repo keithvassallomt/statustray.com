@@ -14,15 +14,15 @@
 
 ## Keyboard shortcut does nothing
 
-- Check that a shortcut is actually set. There is no default, so the **Open Menu Shortcut** row reads "Disabled" until you set one.
+- Check that a shortcut is actually set. There is no default, so the **Open menu shortcut** row on the [Behaviour](/behaviour#open-menu-shortcut) tab reads "Disabled" until you set one.
 - The combination is most likely already in use by GNOME, another extension, or an application. Status Tray has no way to detect this, so try a different one.
 - Confirm at least one app is showing a status icon. With an empty tray there is no menu to open.
 
 ## Wrong icon style
 
-- Open extension preferences.
-- Toggle symbolic/original mode.
-- Re-apply per-app icon settings.
+- Open the settings and go to the [Appearance](/appearance#icon-style) tab.
+- Toggle **Icon style** between symbolic and original.
+- Re-apply per-app icon settings on the [Apps](/apps) tab.
 
 ## Icons diseappear after sleep
 

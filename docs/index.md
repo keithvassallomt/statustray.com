@@ -32,11 +32,25 @@ features:
     link: /basic-usage
     linkText: Read guide
   - icon:
-      src: /icons/customisation.svg
-      alt: Customisation
-    title: Customisation
-    details: Fine-tune each system tray icon
-    link: /customisation
+      src: /icons/apps.svg
+      alt: Apps
+    title: Apps
+    details: Show, hide, reorder and customise each tray icon
+    link: /apps
+    linkText: Read guide
+  - icon:
+      src: /icons/appearance.svg
+      alt: Appearance
+    title: Appearance
+    details: Icon style, size, spacing and panel position
+    link: /appearance
+    linkText: Read guide
+  - icon:
+      src: /icons/behaviour.svg
+      alt: Behaviour
+    title: Behaviour
+    details: Click actions, keyboard shortcut and the overflow menu
+    link: /behaviour
     linkText: Read guide
   - icon:
       src: /icons/troubleshooting.svg

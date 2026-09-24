@@ -16,7 +16,14 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Installing', link: '/installing' },
       { text: 'Basic Usage', link: '/basic-usage' },
-      { text: 'Customisation', link: '/customisation' },
+      {
+        text: 'Settings',
+        items: [
+          { text: 'Apps', link: '/apps' },
+          { text: 'Appearance', link: '/appearance' },
+          { text: 'Behaviour', link: '/behaviour' },
+        ],
+      },
       { text: 'Troubleshooting', link: '/troubleshooting' },
     ],
     sidebar: [
@@ -26,7 +33,19 @@ export default defineConfig({
           { text: 'Home', link: '/' },
           { text: 'Installing', link: '/installing' },
           { text: 'Basic Usage', link: '/basic-usage' },
-          { text: 'Customisation', link: '/customisation' },
+        ],
+      },
+      {
+        text: 'Settings',
+        items: [
+          { text: 'Apps', link: '/apps' },
+          { text: 'Appearance', link: '/appearance' },
+          { text: 'Behaviour', link: '/behaviour' },
+        ],
+      },
+      {
+        text: 'Help',
+        items: [
           { text: 'Troubleshooting', link: '/troubleshooting' },
         ],
       },
