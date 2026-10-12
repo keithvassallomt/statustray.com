@@ -1,6 +1,6 @@
 # Behaviour
 
-The **Behaviour** tab controls how you interact with the tray: what a click does, a keyboard shortcut for opening tray menus, and the overflow menu for when you have more icons than you want in the panel.
+The **Behaviour** tab controls how you interact with the tray: what a click does, a keyboard shortcut for opening tray menus, and overflow for when you have more icons than you want in the panel.
 
 ![Behaviour tab](/behaviour-tab.png)
 
@@ -34,7 +34,7 @@ To set a shortcut, click the **Open menu shortcut** row and press the combinatio
 
 No shortcut is set by default, and the row reads "Disabled" until you set one. The combination must include a modifier such as <kbd>Super</kbd>, <kbd>Ctrl</kbd> or <kbd>Alt</kbd>. A single letter on its own would be captured everywhere and stop you typing it.
 
-If you've enabled [overflow](#overflow) and set the inline icon limit so that every icon lives in the overflow menu, the shortcut opens that menu instead.
+If you've enabled [overflow](#overflow) and set the [inline icon limit](#inline-icon-limit) so that every icon lives in the overflow menu, the shortcut opens that menu instead. With the [icon strip](#icon-strip), it slides the strip out and opens the first icon's menu.
 
 ::: warning Shortcut Conflicts
 GNOME doesn't let an extension check whether a shortcut is already in use, so Status Tray can't warn you about a clash. If your shortcut appears to do nothing, it's most likely already taken by GNOME itself, another extension, or an application. Try a different combination.
@@ -42,19 +42,53 @@ GNOME doesn't let an extension check whether a shortcut is already in use, so St
 
 ## Overflow
 
-If you have many tray icons, you can keep a few in the panel and collapse the rest into a single overflow button. Clicking the button opens a menu listing the other apps, and each one expands to show that app's own menu.
+If you have many tray icons, you can keep a few in the panel and collapse the rest into a single overflow button. Overflow has two modes, which decide what that button does:
+
+- **Icon menu** (default): the button opens a menu listing the hidden apps.
+- **Icon strip**: the button is an arrow that slides the hidden icons out in the top bar.
+
+Overflow is off by default. The other overflow settings are greyed out until you turn it on.
+
+### Icon menu
+
+Clicking the overflow button opens a menu listing the other apps, and each one expands to show that app's own menu.
 
 ![Overflow menu](/overflow_menu.png)
 
-Overflow is off by default. The other overflow settings are greyed out until you turn it on.
+### Icon strip
+
+In this mode, the overflow button is an arrow. Clicking the arrow slides the hidden icons out in the top bar beside it, and clicking it again tucks them away.
+
+If there are more icons than the strip has room for, half of the next icon peeks out, faded, at the edge of the strip. Scroll the strip with the mouse wheel, or click that half icon to bring it into view. [Strip width](#strip-width) sets how many icons fit.
+
+![Icon strip](/strip_mode.png)
+
+Each icon in the strip opens its own menu, just like an icon in the panel.
+
+![Icon strip with a menu open](/strip_mode_with_menu.png)
+
+The [open menu shortcut](#open-menu-shortcut) works here too. When every icon is in the strip, the shortcut slides the strip out and opens the first icon's menu.
+
+To switch to the icon strip, open the [settings window](/basic-usage#opening-the-settings) and go to the **Behaviour** tab. In the **Overflow** group, turn on **Enable overflow**, then set **Mode** to **Icon strip**.
+
+![Overflow settings in Icon strip mode](/strip_mode_settings.png)
 
 ### Enable overflow
 
 Turn this on to collapse extra icons into the overflow button, which sits at the right end of the tray. The button only appears when you have more icons than the [inline icon limit](#inline-icon-limit).
 
+### Mode
+
+Choose how the hidden icons are shown:
+
+- **Icon menu** (default): in a menu that opens from the overflow button. See [Icon menu](#icon-menu).
+- **Icon strip**: in a strip that slides out in the top bar beside an arrow. See [Icon strip](#icon-strip).
+
+Each mode has a setting of its own, and only that mode's row is shown: **Button icon** for Icon menu, and **Strip width** for Icon strip.
+
 ### Button icon
 
-Choose what the overflow button looks like in the panel:
+This row only appears when **Mode** is set to **Icon menu**, since the icon strip always uses an arrow. Choose what the overflow button looks like in the panel:
 
 - **Static icon** (default): Status Tray's own overflow icon, which follows your [icon style](/appearance#icon-style).
 - **Dynamic preview (colour)**: a live preview of up to four of the icons in the overflow menu, in their original colours.
@@ -69,8 +103,14 @@ This row only appears when **Button icon** is set to **Custom icon**. Click **Ch
 
 Until you choose an icon, or if the file you chose goes missing, the button shows Status Tray's standard overflow icon.
 
+### Strip width
+
+This row only appears when **Mode** is set to **Icon strip**. It sets how many icons the strip shows at once before it scrolls. The width ranges from 1 to 20, and the default is 4.
+
+On a crowded panel, the strip can shrink to fit, showing fewer icons than you set here.
+
 ### Inline icon limit
 
-Sets how many icons stay in the panel before the rest are moved to the overflow menu. For example, if you set it to 2, only 2 icons will be shown in the panel, and the rest will be moved to the overflow menu. The limit ranges from 0 to 20, and the default is 3.
+Sets how many icons stay in the panel all the time, outside the overflow menu or strip. For example, if you set it to 2, only 2 icons will be shown in the panel, and the rest will be moved to the menu or strip. The limit ranges from 0 to 20, and the default is 0.
 
-Set it to 0 to move every icon into the overflow menu, leaving just the overflow button in the panel.
+At 0, every tray icon goes into the menu or strip, leaving just the overflow button in the panel.
